@@ -2,7 +2,7 @@
 using AutoMapper;
 using Domain;
 
-namespace Application.Categories.Queries
+namespace Application.Categories.Queries.GetCategoriesList
 {
     public class CategoryDto : IMapWith<Category>
     {

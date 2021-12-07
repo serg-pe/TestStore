@@ -1,4 +1,4 @@
-﻿using Application.Categories.Queries;
+﻿using Application.Categories.Queries.GetCategoriesList;
 using AutoMapper;
 using Infrastructure.Persistance;
 using StoreTests.Common;

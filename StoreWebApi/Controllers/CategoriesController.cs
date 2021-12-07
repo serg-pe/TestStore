@@ -1,4 +1,4 @@
-﻿using Application.Categories.Queries;
+﻿using Application.Categories.Queries.GetCategoriesList;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 

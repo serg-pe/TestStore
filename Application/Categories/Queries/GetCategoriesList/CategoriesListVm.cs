@@ -1,4 +1,4 @@
-﻿namespace Application.Categories.Queries
+﻿namespace Application.Categories.Queries.GetCategoriesList
 {
     public class CategoriesListVm
     {
