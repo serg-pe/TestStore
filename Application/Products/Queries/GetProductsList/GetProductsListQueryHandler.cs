@@ -15,7 +15,13 @@ namespace Application.Products.Queries.GetProductsList
 
         public async Task<ProductsListVm> Handle(GetProductsListQuery request, CancellationToken cancellationToken)
         {
-            var products = await _mapper.ProjectTo<ProductDto>(_dbContext.Products).ToListAsync();
+            IReadOnlyCollection<ProductDto> products;
+            if (request.CategoryId == null)
+                products = await _mapper.ProjectTo<ProductDto>(_dbContext.Products).ToListAsync();
+            else
+                products = await _mapper.ProjectTo<ProductDto>(_dbContext.Products
+                    .Where(product => product.Category.Id == Guid.Parse(request.CategoryId)))
+                    .ToListAsync();
             return new ProductsListVm { Products = products };
         }
     }

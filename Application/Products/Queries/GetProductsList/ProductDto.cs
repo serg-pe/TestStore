@@ -19,7 +19,7 @@ namespace Application.Products.Queries.GetProductsList
             profile.CreateMap<Product, ProductDto>()
                 .ForMember(productDto => productDto.Id, options => options.MapFrom(product => product.Id.ToString()))
                 .ForMember(productDto => productDto.CategoryId, options => options.MapFrom(product => product.Category.Id.ToString()))
-                .ForMember(productDto => productDto.Name, options => options.MapFrom(product => product.Category.Name))
+                .ForMember(productDto => productDto.Name, options => options.MapFrom(product => product.Name))
                 .ForMember(productDto => productDto.Img, options => options.MapFrom(product => product.Img))
                 .ForMember(productDto => productDto.Description, options => options.MapFrom(product => product.Description))
                 .ForMember(productDto => productDto.Pieces, options => options.MapFrom(product => product.Pieces))

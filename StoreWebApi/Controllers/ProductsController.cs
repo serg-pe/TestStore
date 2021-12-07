@@ -15,10 +15,15 @@ namespace StoreWebApi.Controllers
         public ProductsController(IMediator mediator) => _mediator = mediator;
 
         [HttpGet]
+        [Route("")]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<IReadOnlyCollection<ProductDto>>> GetAllProducts()
+        public async Task<ActionResult<IReadOnlyCollection<ProductDto>>> GetProducts()
         {
-            var result = await _mediator.Send(new GetProductsListQuery());
+            string categoryId = HttpContext.Request.Query["categoryId"];
+            var result = await _mediator.Send(new GetProductsListQuery
+            {
+                CategoryId = categoryId,
+            });
             return Ok(result.Products);
         }
 
