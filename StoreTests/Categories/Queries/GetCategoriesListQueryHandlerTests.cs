@@ -28,9 +28,7 @@ namespace StoreTests.Categories.Queries
             var result = await handler.Handle(new GetCategoriesListQuery(), CancellationToken.None);
 
             Assert.IsType<CategoriesListVm>(result);
-            var a = result.Categories.Count;
-            var b = _dbContext.Categories.Local.Count;
-            Assert.Equal(result.Categories.Count, _dbContext.Categories.Local.Count);
+            Assert.Equal(3, result.Categories.Count);
         }
     }
 }

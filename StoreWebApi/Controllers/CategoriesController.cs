@@ -15,7 +15,7 @@ namespace StoreWebApi.Controllers
 
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<CategoriesListVm>> GetAllCategories()
+        public async Task<ActionResult<IReadOnlyCollection<CategoryDto>>> GetAllCategories()
         {
             var vm = await _mediator.Send(new GetCategoriesListQuery());
             return Ok(vm.Categories);
