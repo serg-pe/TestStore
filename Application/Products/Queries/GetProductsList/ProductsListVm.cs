@@ -1,4 +1,4 @@
-﻿namespace Application.Products.Queries
+﻿namespace Application.Products.Queries.GetProductsList
 {
     public class ProductsListVm
     {

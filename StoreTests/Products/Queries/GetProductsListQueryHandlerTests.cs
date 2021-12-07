@@ -1,4 +1,4 @@
-﻿using Application.Products.Queries;
+﻿using Application.Products.Queries.GetProductsList;
 using AutoMapper;
 using Infrastructure.Persistance;
 using StoreTests.Common;

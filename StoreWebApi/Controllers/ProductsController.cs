@@ -1,7 +1,6 @@
-﻿using Application.Products.Queries;
+﻿using Application.Products.Queries.GetProductsList;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using StoreTests.Products.Queries;
 
 namespace StoreWebApi.Controllers
 {

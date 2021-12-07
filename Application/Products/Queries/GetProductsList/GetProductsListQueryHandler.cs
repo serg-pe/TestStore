@@ -2,9 +2,8 @@
 using AutoMapper;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using StoreTests.Products.Queries;
 
-namespace Application.Products.Queries
+namespace Application.Products.Queries.GetProductsList
 {
     public class GetProductsListQueryHandler : IRequestHandler<GetProductsListQuery, ProductsListVm>
     {
