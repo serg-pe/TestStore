@@ -11,6 +11,7 @@ namespace Infrastructure.Persistance
         public DbSet<Category> Categories { get; set; }
         public DbSet<Order> Orders { get; set; }
         public DbSet<Client> Clients { get; set; }
+        public DbSet<User> Users { get; set; }
 
         public StoreDbContext(DbContextOptions options) : base(options) { }
 
@@ -19,7 +20,8 @@ namespace Infrastructure.Persistance
             modelBuilder.ApplyConfiguration(new ProductConfiguration())
                 .ApplyConfiguration(new CategoryConfiguration())
                 .ApplyConfiguration(new OrderConfiguration())
-                .ApplyConfiguration(new ClientConfiguration());
+                .ApplyConfiguration(new ClientConfiguration())
+                .ApplyConfiguration(new UserConfiguration());
         }
     }
 }

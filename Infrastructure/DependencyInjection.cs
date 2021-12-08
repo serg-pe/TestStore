@@ -1,5 +1,6 @@
 ﻿using Application.Interfaces;
 using Infrastructure.Persistance;
+using Infrastructure.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -16,7 +17,7 @@ namespace Infrastructure
                 options.UseNpgsql(configuration.GetConnectionString("Postgresql"));
             });
             services.AddScoped<IStoreDbContext>(serviceProvider => serviceProvider.GetRequiredService<StoreDbContext>());
-
+            services.AddTransient<IDateTimeService, DateTimeService>();
             return services;
         }
     }
