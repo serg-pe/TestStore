@@ -23,7 +23,7 @@ namespace Infrastructure.Persistance
             modelBuilder.ApplyConfiguration(new ProductConfiguration())
                 .ApplyConfiguration(new CategoryConfiguration())
                 .ApplyConfiguration(new OrderConfiguration())
-                .ApplyConfiguration(new ClientConfiguration())
+                .ApplyConfiguration(new ClientConfiguration());
         }
     }
 }
