@@ -1,67 +1,84 @@
 ﻿using Application.Interfaces;
-using Domain;
-using Microsoft.AspNetCore.Authorization;
+using Application.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using StoreWebApi.Models;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 
 namespace StoreWebApi.Controllers
 {
-    [Route("auth")]
     [ApiController]
+    [Route("auth")]
     [Produces("application/json")]
     public class AuthController : ControllerBase
     {
-        private readonly IStoreDbContext _dbContext;
+        private readonly UserManager<ApplicationUser> _userManager;
         private readonly IConfiguration _configuration;
         private readonly IDateTimeService _dateTimeService;
 
-        public AuthController(IStoreDbContext dbContext, IConfiguration configuration, IDateTimeService dateTimeService) =>
-            (_dbContext, _configuration, _dateTimeService) = (dbContext, configuration, dateTimeService);
+        public AuthController(UserManager<ApplicationUser> userManager, IConfiguration configuration, IDateTimeService dateTimeService) =>
+            (_userManager, _configuration, _dateTimeService) = (userManager, configuration, dateTimeService);
 
-        [AllowAnonymous]
         [HttpPost]
         [Route("login")]
-        [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<string>> Login([FromBody()])
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        public async Task<ActionResult> Login([FromBody] LoginVm loginVm)
         {
-            var user = await Authenticate(email, password);
+            var user = await _userManager.FindByEmailAsync(loginVm.Email);
             if (user == null)
-                return Forbid();
-
-            var token = GenerateToken(user);
-            return Ok(token);
-        }
-
-        private async Task<User> Authenticate(string email, string password)
-        {
-            var currentUser = await _dbContext.Users.FirstOrDefaultAsync(user => user.Email.Equals(email) && user.Password.Equals(password));
-            return currentUser;
-        }
-
-        private string GenerateToken(User user)
-        {
-            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration.GetSection("Jwt")["Secret"]));
-            var signinCredentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
+                return Unauthorized();
 
             var claims = new List<Claim>
             {
                 new Claim(ClaimTypes.Email, user.Email),
             };
 
+            var signinKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration.GetSection("Jwt")["Secret"]));
             var token = new JwtSecurityToken(
-                _configuration.GetSection("Jwt")["Issuer"],
-                _configuration.GetSection("Jwt")["Audience"],
-                claims,
+                issuer: _configuration.GetSection("Jwt")["Issuer"],
+                audience: _configuration.GetSection("Jwt")["Audience"],
                 expires: _dateTimeService.Now.AddHours(int.Parse(_configuration.GetSection("Jwt")["Lifetime"])),
-                signingCredentials: signinCredentials
+                signingCredentials: new SigningCredentials(signinKey, SecurityAlgorithms.HmacSha256)
                 );
 
-            return new JwtSecurityTokenHandler().WriteToken(token);
+            return Ok(new
+            {
+                AccessToken = new JwtSecurityTokenHandler().WriteToken(token),
+                User = new
+                {
+                    Email = user.Email,
+                    Id = user.Id,
+                }
+            });
+        }
+
+        [HttpPost]
+        [Route("register")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult> Register([FromBody] LoginVm userCredentials)
+        {
+            var user = await _userManager.FindByEmailAsync(userCredentials.Email);
+            if (user != null)
+                return BadRequest();
+
+            user = new ApplicationUser
+            {
+                Id = Guid.NewGuid().ToString(),
+                Email = userCredentials.Email,
+                UserName = userCredentials.Email,
+            };
+
+            var result = await _userManager.CreateAsync(user);
+            if (result.Succeeded)
+                return Ok();
+            
+            return StatusCode(StatusCodes.Status500InternalServerError);
         }
     }
 }

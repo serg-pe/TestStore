@@ -1,11 +1,13 @@
 ﻿using Application.Interfaces;
+using Application.Models;
 using Domain;
 using Infrastructure.Persistance.EntityTypeConfigurations;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Persistance
 {
-    public class StoreDbContext : DbContext, IStoreDbContext
+    public class StoreDbContext : IdentityDbContext<ApplicationUser>, IStoreDbContext
     {
         public DbSet<Product> Products { get; set; }
         public DbSet<Category> Categories { get; set; }
@@ -17,11 +19,11 @@ namespace Infrastructure.Persistance
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            base.OnModelCreating(modelBuilder);
             modelBuilder.ApplyConfiguration(new ProductConfiguration())
                 .ApplyConfiguration(new CategoryConfiguration())
                 .ApplyConfiguration(new OrderConfiguration())
                 .ApplyConfiguration(new ClientConfiguration())
-                .ApplyConfiguration(new UserConfiguration());
         }
     }
 }
