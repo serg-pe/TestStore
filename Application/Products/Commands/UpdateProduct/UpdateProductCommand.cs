@@ -1,9 +1,11 @@
-﻿namespace Domain
+﻿using MediatR;
+
+namespace Application.Products.Commands.UpdateProduct
 {
-    public class Product
+    public class UpdateProductCommand : IRequest
     {
-        public Guid Id { get; set; }
-        public Category Category { get; set; }
+        public Guid ProductId { get; set; }
+        public string CategoryId { get; set; }
         public string? Img { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }

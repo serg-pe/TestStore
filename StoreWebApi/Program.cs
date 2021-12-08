@@ -57,7 +57,8 @@ builder.Services.AddAutoMapper(assemblies =>
 
 builder.Services.AddApplication();
 
-builder.Services.AddControllers();
+builder.Services.AddControllers()
+    .AddNewtonsoftJson();
 
 var app = builder.Build();
 
