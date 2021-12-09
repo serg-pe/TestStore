@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace StoreWebApi.Controllers
 {
-    [Route("category")]
+    [Route("api/category")]
     [ApiController]
     [Produces("application/json")]
     public class CategoriesController : ControllerBase

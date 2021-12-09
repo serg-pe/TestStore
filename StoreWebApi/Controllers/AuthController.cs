@@ -11,7 +11,7 @@ using System.Text;
 namespace StoreWebApi.Controllers
 {
     [ApiController]
-    [Route("auth")]
+    [Route("authapi")]
     [Produces("application/json")]
     public class AuthController : ControllerBase
     {

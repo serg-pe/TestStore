@@ -14,7 +14,7 @@ using StoreWebApi.Models;
 namespace StoreWebApi.Controllers
 {
     [ApiController]
-    [Route("orders")]
+    [Route("api/orders")]
     [Produces("application/json")]
     public class OrdersController : ControllerBase
     {
